@@ -19,9 +19,7 @@ export const signup = async (req, res) => {
       return res.status(400).json({ message: "username already exists" });
     }
     if (password.length < 6) {
-      return res
-        .status(400)
-        .json({ message: "password must be atleast of 6 characters" });
+      return res.status(400).json({ message: "password must be atleast of 6 characters" });
     }
     const salt = await bcrypt.genSalt(10);
     const hashPassword = await bcrypt.hash(password, salt);
@@ -37,21 +35,12 @@ export const signup = async (req, res) => {
       expiresIn: "3d",
     });
     res.cookie("jwt-linkedin", token, {
-      httpOnly: true, //prevents accessing of cookie using javascript
+      httpOnly: true,
       maxAge: 3 * 24 * 60 * 60 * 1000,
-      sameSite: "strict", // prevents csrf attacks
-      secure: process.env.NODE_ENV === "production", //prevents man-in-middle attacks
+      sameSite: "none",
+      secure: true,
     });
     res.status(201).json({ message: "User is sucessfully created" });
-
-    //todo send welcome email
-    // const profileUrl = process.env.CLIENT_URL + "/profile/" + user.username;
-    // try {
-    //   await sendWelcomeEmail(user.name, user.email, profileUrl);
-    // } catch (error) {
-    //   console.log(`internal error while sending welcome mail ${error.message}`);
-    //   throw error;
-    // }
   } catch (error) {
     console.log(`error in signup ${error.message}`);
     res.status(501).json({ message: "Internal error" });
@@ -75,14 +64,12 @@ export const login = async (req, res) => {
     res.cookie("jwt-linkedin", Token, {
       httpOnly: true,
       maxAge: 3 * 24 * 60 * 60 * 1000,
-      sameSite: "strict",
-      secure: process.env.NODE_ENV === "production",
+      sameSite: "none",
+      secure: true,
     });
     return res.status(200).json({ message: "User logged in successfully" });
   } catch (error) {
-    return res
-      .status(500)
-      .json({ message: `Internal error while user  logging ${error.message}` });
+    return res.status(500).json({ message: `Internal error while user logging ${error.message}` });
   }
 };
 
