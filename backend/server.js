@@ -10,24 +10,22 @@ import connectionRoutes from "./Routes/connection.route.js";
 import cors from "cors";
 
 dotenv.config();
+connectDb();
+
 const server = express();
 server.use(express.json({ limit: "10mb" }));
 server.use(cookieParser());
 server.use(
   cors({
     origin: process.env.CLIENT_URL,
-    credentials: true, //allows frontend to send cookies through req
+    credentials: true,
   })
 );
+
 server.use("/api/v1/auth", authRoutes);
 server.use("/api/v1/user", userRoutes);
 server.use("/api/v1/post", postRoutes);
 server.use("/api/v1/notification", notificationRoutes);
 server.use("/api/v1/connection", connectionRoutes);
-
-server.listen(process.env.PORT || 5000, () => {
-  console.log(`server is running in ${5000}`);
-  connectDb();
-});
 
 export default server;
