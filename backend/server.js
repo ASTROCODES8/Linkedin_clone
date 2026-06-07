@@ -29,3 +29,5 @@ server.listen(process.env.PORT || 5000, () => {
   console.log(`server is running in ${5000}`);
   connectDb();
 });
+
+export default server;
