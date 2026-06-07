@@ -1,9 +1,12 @@
 import mongoose from "mongoose";
-import dotenv from "dotenv";
+
+let isConnected = false;
 
 const connectDb = async () => {
+  if (isConnected) return;
   try {
-    const connect = await mongoose.connect(process.env.MONGO_URI);
+    await mongoose.connect(process.env.MONGO_URI);
+    isConnected = true;
     console.log("Mongo db connected");
   } catch (error) {
     console.log(error.message);
